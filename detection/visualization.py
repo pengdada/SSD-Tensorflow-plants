@@ -59,12 +59,15 @@ def colors_subselect(colors, num_classes=21):
     return sub_colors
 
 colors_plasma = colors_subselect(mpcm.plasma.colors, num_classes=21)
+'''
+
 colors_tableau = [(255, 255, 255), (31, 119, 180), (174, 199, 232), (255, 127, 14), (255, 187, 120),
                   (44, 160, 44), (152, 223, 138), (214, 39, 40), (255, 152, 150),
                   (148, 103, 189), (197, 176, 213), (140, 86, 75), (196, 156, 148),
                   (227, 119, 194), (247, 182, 210), (127, 127, 127), (199, 199, 199),
-                  (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229)]
-'''
+                  (188, 189, 34), (219, 219, 141), (23, 190, 207), (158, 218, 229),
+                  (0, 255, 255)]
+
 
 # =========================================================================== #
 # OpenCV drawing.
@@ -89,7 +92,7 @@ def draw_bbox(img, bbox, shape, label, color=[255, 0, 0], thickness=2):
     cv2.putText(img, str(label), p1[::-1], cv2.FONT_HERSHEY_DUPLEX, 0.5, color, 1)
 
 
-def bboxes_draw_on_img(img, classes, scores, bboxes, colors, thickness=2):
+def bboxes_draw_on_img(img, classes, scores, bboxes, colors=colors_tableau, thickness=2):
     shape = img.shape
     for i in range(bboxes.shape[0]):
         cls_id = int(classes[i])
@@ -107,7 +110,9 @@ def bboxes_draw_on_img(img, classes, scores, bboxes, colors, thickness=2):
         #s = '%s/%.3f' % (classes[i], scores[i])
         p1 = (p1[0]-5, p1[1])
         cv2.putText(img, s, p1[::-1], cv2.FONT_HERSHEY_DUPLEX, 0.4, color, 1)
-        cv2.imwrite("result_img.png")
+        cv2.imwrite("result_img.png", img)
+        cv2.imshow("detection", img)
+        cv2.waitKey(30)
 
 '''
 # =========================================================================== #
