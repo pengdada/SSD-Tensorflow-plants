@@ -106,6 +106,7 @@ def bboxes_draw_on_img(img, classes, scores, bboxes, colors, thickness=2):
         #s = '%s/%.3f' % (classes[i], scores[i])
         p1 = (p1[0]-5, p1[1])
         cv2.putText(img, s, p1[::-1], cv2.FONT_HERSHEY_DUPLEX, 0.4, color, 1)
+        cv2.imwrite("result_img.png")
 
 
 # =========================================================================== #

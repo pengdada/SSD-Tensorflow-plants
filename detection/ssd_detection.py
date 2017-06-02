@@ -128,4 +128,5 @@ for i, _ in enumerate(image_names):
     #process_multi_img(img, start_scale=0.5, end_scale=0.5, scale=0.5)
     rclasses, rscores, rbboxes =  process_image(img)
     # visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes, visualization.colors_plasma)
-    visualization.plt_bboxes(img, rclasses, rscores, rbboxes)
+    #visualization.plt_bboxes(img, rclasses, rscores, rbboxes)
+    visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes)
