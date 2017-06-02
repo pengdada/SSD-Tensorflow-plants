@@ -1,4 +1,5 @@
 #usage:
+
     * unzip ckp-22.zip
     * set your image folder path, ssd_detection.py line:76 , path=YOUR_FOLDER_PATH  
     * run script as :   python ssd_detection.py   
