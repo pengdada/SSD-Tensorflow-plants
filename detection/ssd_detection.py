@@ -8,8 +8,8 @@ import cv2
 
 slim = tf.contrib.slim
 
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
+#import matplotlib.pyplot as plt
+#import matplotlib.image as mpimg
 
 import sys
 sys.path.append('../')
@@ -124,9 +124,12 @@ def process_multi_img(img, start_scale=1, end_scale=0.0625, scale=0.8, step=150,
 
 for i, _ in enumerate(image_names):
     #img = mpimg.imread(path + image_names[-1])
-    img = mpimg.imread(path + image_names[i])
+    #img = mpimg.imread(path + image_names[i])
+    img = cv2.imread(path + image_names[i])
+    img = img[...,::-1]
     #process_multi_img(img, start_scale=0.5, end_scale=0.5, scale=0.5)
     rclasses, rscores, rbboxes =  process_image(img)
     # visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes, visualization.colors_plasma)
     #visualization.plt_bboxes(img, rclasses, rscores, rbboxes)
+    img = img[...,::-1]
     visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes)
