@@ -70,18 +70,62 @@ def process_image(img, select_threshold=0.5, nms_threshold=.45, net_shape=(300, 
     rbboxes = np_methods.bboxes_resize(rbbox_img, rbboxes)
     return rclasses, rscores, rbboxes
 
-
 # Test on some demo image and visualize output.
 #path = '../demo/'
-path="/home/peng/data/VOCdevkit/VOCcrest/JPEGImages/"
+#path="/home/peng/data/VOCdevkit/VOCcrest/JPEGImages/"
+path="/media/peng/DATADRIVE2/LPixel/000001.jpg/Alaska/"
 image_names = sorted(os.listdir(path))
+
+def get_multi_img(img, start_scale=1, end_scale=0.0625, scale=0.8, step=150, net_shape=(300, 300)):
+    shape = img.shape
+    sub_pos = []
+
+    k = 0
+    while True:
+        _scale = start_scale*math.pow(scale, k)
+        if (_scale < end_scale): break
+        k = k + 1
+        _step   = int(step/_scale)
+        _shape  = [int(shape[0]/_scale), int(shape[1]/_scale), shape[2]]
+        _net_shape = [int(net_shape[0]/_scale), int(net_shape[1]/_scale)]
+
+        ry = range(0, shape[0]-_net_shape[0], _step)
+        rx = range(0, shape[1]-_net_shape[1], _step)
+        rh = []
+        rw = []
+        for i in range(len(ry)):
+            if (i == len(ry)-1): rh.append(shape[0] - ry[i])
+            else:                rh.append(_net_shape[0])
+
+        for j in range(len(rx)):
+            if (j == len(rx)-1): rw.append(shape[1] - rx[j])
+            else:                rw.append(_net_shape[1])
+
+        for i in range(len(ry)):
+            for j in range(len(rx)):
+                y, x, h, w = ry[i], rx[j], rh[i], rw[j]
+                sub_pos.append((y, x, h, w))
+    return sub_pos
+
+
+
+def process_multi_img(img, start_scale=1, end_scale=0.0625, scale=0.8, step=150, net_shape=(300, 300)):
+    sub_pos = get_multi_img(img, start_scale, end_scale, scale, step, net_shape)
+    result = []
+    for (y, x, h, w) in sub_pos:
+        _img = img[y:y + h, x:x + w, ...]
+        #cv2.imshow("img", _img)
+        #cv2.waitKey(300)
+        rclasses, rscores, rbboxes = process_image(_img, select_threshold=0.5, nms_threshold=.45, net_shape=net_shape)
+        for i in range(len(rclasses)):
+            result.append((rclasses[i], rscores[i], rbboxes[i]))
+        visualization.plt_bboxes(_img, rclasses, rscores, rbboxes)
+
 
 for i, _ in enumerate(image_names):
     #img = mpimg.imread(path + image_names[-1])
     img = mpimg.imread(path + image_names[i])
-    _img = img[...,::-1]
-    #cv2.imshow("img", _img);
-    #cv2.waitKey(0)
+    #process_multi_img(img, start_scale=0.5, end_scale=0.5, scale=0.5)
     rclasses, rscores, rbboxes =  process_image(img)
     # visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes, visualization.colors_plasma)
     visualization.plt_bboxes(img, rclasses, rscores, rbboxes)
