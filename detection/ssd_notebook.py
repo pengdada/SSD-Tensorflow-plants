@@ -16,7 +16,7 @@ sys.path.append('../')
 
 from nets import ssd_vgg_300, ssd_common, np_methods
 from preprocessing import ssd_vgg_preprocessing
-from notebooks import visualization
+from detection import visualization
 
 # TensorFlow session: grow memory when needed. TF, DO NOT USE ALL MY GPU MEMORY!!!
 gpu_options = tf.GPUOptions(allow_growth=True)
@@ -79,6 +79,9 @@ image_names = sorted(os.listdir(path))
 for i, _ in enumerate(image_names):
     #img = mpimg.imread(path + image_names[-1])
     img = mpimg.imread(path + image_names[i])
+    _img = img[...,::-1]
+    #cv2.imshow("img", _img);
+    #cv2.waitKey(0)
     rclasses, rscores, rbboxes =  process_image(img)
     # visualization.bboxes_draw_on_img(img, rclasses, rscores, rbboxes, visualization.colors_plasma)
     visualization.plt_bboxes(img, rclasses, rscores, rbboxes)
